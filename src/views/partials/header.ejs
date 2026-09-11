@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Bairon Cayetano">
+    <meta name="description" content="We promote service across the world by connecting volunteers with service opportunities in their community">
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/main.css">
-</head>
+    <link rel="stylesheet" href="/css/large.css" media="screen and (min-width: 900px)">
+
+    <script type="module" src="/scripts/navigation.mjs"></script>
+    </head>
 <body>
-    <nav>
-        <ul>
+    <nav class="site-navigation" aria-label="Main navigation">
+        <button class="menu-toggle" id="menu-toggle" type="button" title="open/close menu"></button>
+        <ul class="menu-buttons">
             <li><a href="/">Home</a></li>
             <li><a href="/organizations">Organizations</a></li>
             <li><a href="/projects">Projects</a></li>

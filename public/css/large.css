@@ -1,0 +1,30 @@
+@media screen and (min-width: 900px) {
+    .site-navigation, .site-navigation.show {
+        flex-direction: row;
+        padding: 0 2rem;
+    }
+
+    .menu-toggle,
+    .menu-toggle.show{
+        display: none;
+    }
+
+    .menu-buttons, .menu-toggle.show ~ .menu-buttons {
+        align-items: center;
+        display: flex;
+        gap: 2rem;
+        margin: 0 auto;
+        max-width: var(--content-width);
+        padding: 0;
+    }
+
+    .menu-buttons a {
+        padding: 1rem 0;
+        transition: color 180ms ease;
+    }
+
+    .page-content {
+        box-shadow: 0 8px 30px rgb(0 0 0 / 6%);
+        margin: 3rem auto;
+    }
+}
