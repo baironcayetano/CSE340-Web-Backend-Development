@@ -58,4 +58,42 @@ VALUES
 	  (3, 'Winter Coat Drive', 'Collect and distribute warm coats and blankets to individuals experiencing homelessness during the winter.', 'Detroit, Michigan, USA', '2026-11-16T10:00:00.000Z'),
 	  (3, 'Job Skills Workshop', 'Help lead free workshops teaching resume writing and interview skills to unemployed community members.', 'Cleveland, Ohio, USA', '2026-10-22T13:00:00.000Z');
 
-	  
+-- ============================
+-- Categories 
+-- ============================
+-- This table saves the different types of proyects
+CREATE TABLE category (
+	category_id SERIAL PRIMARY KEY,
+	name VARCHAR(150) NOT NULL
+);
+
+-- ============================
+--  has_category
+-- ============================
+-- This table connects a service_project with its categories using a connection N:N 
+CREATE TABLE has_category(
+	project_id	INT NOT NULL REFERENCES service_project(project_id) ON DELETE CASCADE,
+	category_id INT NOT NULL REFERENCES category(category_id) ON DELETE CASCADE,
+	PRIMARY KEY (project_id, category_id)
+);
+
+-- =============================
+-- Sample Data
+-- =============================
+-- category
+INSERT INTO category (name) 
+VALUES ('Poverty Relief'), ('Healthcare'), ('Education'), ('Enviroment'), ('Community Development');
+
+-- has_category
+INSERT INTO has_category (project_id, category_id)
+VALUES (1,1), (2,1),(3,2), (4,3), (5,3),
+	   (6,4), (7,4), (8,4), (9,5), (10,4),
+	   (11,2), (12,5), (13,4), (14,1), (15,3);
+
+-- SELECTING each project and it's category
+SELECT sp.project_id, sp.title AS project_name, 
+	   c.name AS category_name
+FROM service_project sp
+JOIN has_category hc ON sp.project_id = hc.project_id
+JOIN category c ON hc.category_id = c.category_id
+ORDER BY sp.project_id;

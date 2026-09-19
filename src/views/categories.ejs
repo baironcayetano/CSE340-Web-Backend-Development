@@ -3,10 +3,9 @@
 <main class="page-content">
     <h1><%= title %></h1>
     <ul class="content-list">
-        <li>Enviromental</li>
-        <li>Educational</li>
-        <li>Comunity Service</li>
-        <li>Heath and Wellness</li>
+        <% categories.forEach(category => { %>
+           <li><%= category.name %></li>
+        <% }); %>
     </ul>
 </main>
 
