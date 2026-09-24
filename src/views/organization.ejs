@@ -5,10 +5,12 @@
     <img class="main-logo" src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
     <p>Description: <%= organizationDetails.description %></p>
 
-    <h3>Service Projects</h3>
-    <ul>
+    <h3>Service Projects:</h3>
+    <ul class="link-list">
         <% projects.forEach(project => { %>
-            <li><a href="/project/<%= project.project_id %>"><%= project.title %></a></li>
+            <li class="link-element">
+                <a href="/project/<%= project.project_id %>"><%= project.title %></a>
+            </li>
         <% }) %>
     </ul>
 </main>
