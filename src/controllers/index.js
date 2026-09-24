@@ -1,7 +1,7 @@
 /* Render home page */
 const showHomePage = (req, res) => {
     const title = "Home";
-    res.render("Home",{title});
+    res.render("home",{title});
 };
 
 export {showHomePage};
