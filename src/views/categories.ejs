@@ -2,9 +2,9 @@
 
 <main class="page-content">
     <h1><%= title %></h1>
-    <ul class="content-list">
+    <ul class="grid-link-list link-list">
         <% categories.forEach(category => { %>
-           <li><%= category.name %></li>
+           <li class="grid-link-element"><%= category.name %></li>
         <% }); %>
     </ul>
 </main>
