@@ -26,6 +26,7 @@
     .page-content {
         box-shadow: 0 8px 30px rgb(0 0 0 / 6%);
         margin: 3rem auto;
+        border-radius: 1.25rem;
     }
 
     .grid-link-list{

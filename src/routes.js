@@ -2,7 +2,7 @@ import express from "express";
 
 import { showHomePage } from "./controllers/index.js";
 import { showOrganizationDetailsPage, showOrganizationsPage } from "./controllers/organizations.js";
-import { showProjectsPage } from "./controllers/projects.js";
+import { showProjectDetailsPage, showProjectsPage } from "./controllers/projects.js";
 import { showCategoriesPage } from "./controllers/categories.js";
 import { testErrorPage } from "./controllers/errors.js";
 
@@ -18,5 +18,8 @@ router.get("/test-error", testErrorPage);
 
 //route for organization details page
 router.get("/organization/:id", showOrganizationDetailsPage);
+//route for project details page
+router.get("/project/:id", showProjectDetailsPage);
+
 
 export default router;

@@ -12,22 +12,27 @@ const showOrganizationsPage = async (req, res) => {
 /** Render Organization Details Page */
 const showOrganizationDetailsPage = async (req, res, next) => {
     const organizationId = req.params.id ? Number(req.params.id) : null;
+    
     //organizationId validation
     if(!Number.isInteger(organizationId) || organizationId < 0){
-        let err = null;
-        //if organizationId is not a number
-        if(!Number.isInteger(organizationId)) err = new Error("Invalid parameter Id. Expected an integer");
-        //if organizationId is lower than 0
-        else err = new Error("Invalid parameter Id. Expected Id > 0");
+        const err = new Error("Invalid id parameter");
         err.status = 404;
         return next(err);
     }
 
-    const organizationDetails = await getOrganizationDetails(organizationId);
+    const organization = await getOrganizationDetails(organizationId);
+
+    //Not Found
+    if(!organization){
+        const err = new Error("Page Not Found");
+        err.status = 404;
+        return next(err);
+    }
+
     const projects = await getProjectsByOrganizationId(organizationId);
     const title = "Organization Details";
 
-    res.render("organization", {title, organizationDetails, projects});
+    res.render("organization", {title, organization, projects});
 }
 
 export { showOrganizationsPage, showOrganizationDetailsPage };

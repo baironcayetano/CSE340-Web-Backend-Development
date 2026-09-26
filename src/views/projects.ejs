@@ -4,7 +4,15 @@
         <h2>Upcoming Service Projects</h2>
         <ul class="grid-link-list link-list">
              <% projects.forEach(project => { %>
-             <li class="grid-link-element"><%= new Date(project.date).toLocaleString(undefined, { dateStyle:"medium", timeStyle:"short"})%>: <%= project.title %> (<%= project.organization_name %>)</li>
+             <li class="grid-link-element">
+                <a href="/project/<%= project.project_id %>" class="link-button">
+                    <strong><%= project.title %></strong> 
+                    <span><%= new Date(project.date).toLocaleString(undefined, { dateStyle:"medium", timeStyle:"short"}) %></span>
+                </a>
+                <a href="/organization/<%= project.organization_id %>" class="link">
+                    <span><%= project.organization_name %></span>
+                </a>
+            </li>
             <% }); %>
         </ul>
     </main>

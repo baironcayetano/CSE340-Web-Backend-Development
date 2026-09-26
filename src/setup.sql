@@ -89,11 +89,3 @@ INSERT INTO has_category (project_id, category_id)
 VALUES (1,1), (2,1),(3,2), (4,3), (5,3),
 	   (6,4), (7,4), (8,4), (9,5), (10,4),
 	   (11,2), (12,5), (13,4), (14,1), (15,3);
-
--- SELECTING each project and it's category
-SELECT sp.project_id, sp.title AS project_name, 
-	   c.name AS category_name
-FROM service_project sp
-JOIN has_category hc ON sp.project_id = hc.project_id
-JOIN category c ON hc.category_id = c.category_id
-ORDER BY sp.project_id;

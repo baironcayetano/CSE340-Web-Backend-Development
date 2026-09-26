@@ -7,6 +7,7 @@
     --color-border: #d2d2d7;
     --content-width: 1100px;
     --space-page: 1rem;
+    --link-color:navy;
 }
 
 * {
@@ -96,7 +97,6 @@ body {
 
 .page-content {
     background: var(--color-surface);
-    border-radius: 1.25rem;
     max-width: var(--content-width);
     padding: 2rem var(--space-page);
 }
@@ -119,7 +119,20 @@ p{
     color: var(--color-muted);
 }
 
+/** For in-text links**/
+.link{
+    text-decoration: none;
+    color:var(--link-color);
+}
 
+.link > span, .link > strong {
+    color: var(--link-color);
+}
+
+.link:hover > span, .link:hover > strong {
+    background-color: var(--link-color);
+    color:white;
+}
 
 /** For grid lists links**/
 .grid-link-list{
@@ -134,19 +147,33 @@ p{
 .grid-link-element{
     width: 100%;
     min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     padding: 10px;
     border: 1px solid var(--color-border);
     border-radius: 5px;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid-link-element a{
+    text-decoration:none;
+    color:black;
+    width: 100%;
+}
+
+.grid-link-element > .link-button {
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+    margin-bottom: 5px;
     cursor: pointer;
 }
 
-.grid-link-element:hover{
-    background-color: var(--color-background);
+.grid-link-element > a > span, .grid-link-element > a > strong{
+    display: block;
 }
 
 /** For lists with links **/
@@ -195,6 +222,18 @@ p{
 
 .link-button:hover{
     background-color: var(--color-background);
+}
+
+details{
+    margin-bottom: 20px;
+}
+
+summary{
+    cursor: pointer;
+}
+
+details > pre{
+    margin-inline-start: 20px;
 }
 
 .main-logo {
