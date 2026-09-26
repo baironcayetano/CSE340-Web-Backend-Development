@@ -2,11 +2,19 @@ import { getAllOrganizations, getOrganizationDetails } from "../models/organizat
 import { getProjectsByOrganizationId } from "../models/projects.js";
 
 /* Render Organizations Page */
-const showOrganizationsPage = async (req, res) => {
+const showOrganizationsPage = async (req, res, next) => {
     const title = "Our Partner Organizations";
-    const organizations = await getAllOrganizations();
 
-    res.render("organizations", {title, organizations});
+    try{
+        const organizations = await getAllOrganizations();
+        res.render("organizations", {title, organizations});
+    }
+
+    catch(error){
+        const err = error;
+        err.status = 500;
+        return next(err);
+    }
 };
 
 /** Render Organization Details Page */
@@ -20,19 +28,28 @@ const showOrganizationDetailsPage = async (req, res, next) => {
         return next(err);
     }
 
-    const organization = await getOrganizationDetails(organizationId);
+    try{
+        const organization = await getOrganizationDetails(organizationId);
 
-    //Not Found
-    if(!organization){
-        const err = new Error("Page Not Found");
-        err.status = 404;
-        return next(err);
+        //Not Found
+        if(!organization){
+            const err = new Error("Page Not Found");
+            err.status = 404;
+            return next(err);
+        }
+
+        const projects = await getProjectsByOrganizationId(organizationId);
+        const title = "Organization Details";
+
+        res.render("organization", {title, organization, projects});
     }
 
-    const projects = await getProjectsByOrganizationId(organizationId);
-    const title = "Organization Details";
-
-    res.render("organization", {title, organization, projects});
+    catch (error){
+        const err = error;
+        err.status = 500;
+        return next(err);
+    }
+    
 }
 
 export { showOrganizationsPage, showOrganizationDetailsPage };
