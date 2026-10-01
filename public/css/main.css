@@ -232,6 +232,24 @@ p{
     background-color: var(--color-background);
 }
 
+/** For (no link) buttons **/
+button{
+    border: 1px solid var(--color-border);
+    border-radius: 5px;
+    text-decoration: none;
+    text-align: center;
+    color: black;
+    background-color: transparent;
+    padding: 10px;
+    font-size: 16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background-color:var(--color-background);
+}
+
+/**For details sections**/
 details{
     margin-bottom: 20px;
 }

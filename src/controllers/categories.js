@@ -4,14 +4,9 @@ import { getAllProjectsByCategoryId } from "../models/projects.js";
 /** Render Categories Page */
 const showCategoriesPage = async (req, res, next) => {
     const title = "Categories";
-    try {
-        const categories = await getAllCategories();
-        res.render("categories", {title, categories});   
-    } catch (error) {
-        const err = error;
-        err.status = 500;
-        next(err);
-    }
+    
+    const categories = await getAllCategories();
+    res.render("categories", {title, categories});   
 }
 
 /** Render category details Page */
@@ -25,28 +20,21 @@ const showCategoryDetailsPage = async (req, res, next) => {
         next(err);
     }
 
-    try{
-        const category = await getCategoryById(categoryId);
+    
+    const category = await getCategoryById(categoryId);
 
-        //Not found
-        if(!category){
-            const err = new Error("Page Not Found");
-            err.status = 404;
-            next(err);
-        }
-
-        //retrieves all the projects with that category
-        const projects = await getAllProjectsByCategoryId(categoryId);
-        const title = `${category.name} | Details`;
-
-        res.render("category", {title, category, projects});
-        
-    }catch(error){
-        const err = error;
-        err.status = 500;
+    //Not found
+    if(!category){
+        const err = new Error("Page Not Found");
+        err.status = 404;
         next(err);
     }
-    
+
+    //retrieves all the projects with that category
+    const projects = await getAllProjectsByCategoryId(categoryId);
+    const title = `${category.name} | Details`;
+
+    res.render("category", {title, category, projects});
 }
 
 export { showCategoriesPage, showCategoryDetailsPage};
