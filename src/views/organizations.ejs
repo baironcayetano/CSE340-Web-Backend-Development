@@ -5,12 +5,13 @@
         <p>Here are a few of our partner organizations:</p>
         <ul class="link-list">
             <% organizations.forEach(organization => { %>
-            <li class="link-element">
-                <a href="/organization/<%= organization.organization_id %>">
+            <li class="link-element organization">
+                <a href="/organization/<%= organization.organization_id %>" class="organization-link">
                     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
                     <span><%= organization.name %></span>
                     <span><%= organization.contact_email %></span>
                 </a>
+                <a href="/edit-organization/<%= organization.organization_id %>" class="link-button">Edit organization</a>
             </li>
             <% }); %>
         </ul>

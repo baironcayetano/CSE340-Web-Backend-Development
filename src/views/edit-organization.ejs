@@ -1,0 +1,24 @@
+<%-include("partials/header") %>
+  <main class="page-content">
+    <h1><%= title %></h1>
+    <form action="/edit-organization/<%= organizationDetails.organization_id %>"  method="POST">
+      <div class="form-group">
+         <label for="name">Organization name:</label>
+         <input type="text" id="name"  name="name" value="<%= organizationDetails.name %>" required>
+      </div>
+      <div class="form-group">
+         <label for="description">Description: </label>
+         <textarea id="description" name="description" required><%= organizationDetails.description %></textarea>
+      </div>
+      <div class="form-group">
+         <label for="contactEmail">Contact Email:</label>
+         <input type="email" id="contactEmail" name="contactEmail" value="<%= organizationDetails.contact_email %>" required>
+      </div>
+      <div class="form-group">
+         <label for="logoFilename">Logo:</label>
+         <input type="text" id="logoFilename" name="logoFilename" value="<%= organizationDetails.logo_filename%>" required>
+      </div>
+      <button type="submit" title="Update Organization">Update Organization</button>
+    </form>
+  </main>
+<%-include("partials/footer") %>

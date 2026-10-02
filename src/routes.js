@@ -3,7 +3,8 @@ import express from "express";
 import { showHomePage } from "./controllers/index.js";
 import { showOrganizationDetailsPage, showOrganizationsPage, 
          showNewOrganizationForm, processNewOrganizationForm,
-         organizationValidation
+         organizationValidation, showEditOrganizationForm,
+         processEditOrganizationForm
 } from "./controllers/organizations.js";
 import { showProjectDetailsPage, showProjectsPage } from "./controllers/projects.js";
 import { showCategoriesPage, showCategoryDetailsPage} from "./controllers/categories.js";
@@ -31,5 +32,11 @@ router.get("/new-organization", showNewOrganizationForm);
 
 //route to handle new organization form submission
 router.post("/new-organization",organizationValidation, processNewOrganizationForm);
+
+//route for edit organization page
+router.get("/edit-organization/:id",showEditOrganizationForm);
+
+//route to handle edit organization form submission
+router.post("/edit-organization/:id", processEditOrganizationForm);
 
 export default router;

@@ -177,8 +177,8 @@ form{
 }
 
 .alert.success{
-  color:#1a4d2e;
-  background-color: rgba(240, 253, 244, 0.9);
+  color:#ddd;
+  background-color: #c8ebc1;
   border-color: #dcfce7;
 }
 
@@ -324,6 +324,36 @@ form{
 .link-button:hover{
     background-color: var(--color-background);
 }
+
+.organization{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding:10px;
+    gap:10px;
+}
+
+
+.organization:hover{
+    background-color: white;
+}
+
+.organization > .organization-link{
+   width:100%;
+   padding:10px;
+}
+
+.organization > .organization-link:hover{
+    background-color: var(--color-background);
+}
+
+.organization > .link-button{
+   width:max-content;
+   text-align:center;
+   display:block;
+}
+
 
 /** For (no link) buttons **/
 button{

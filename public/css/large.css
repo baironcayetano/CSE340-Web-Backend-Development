@@ -33,4 +33,19 @@
         grid-template-columns: repeat(3, 1fr);
     }
 
+    .organization{
+       flex-direction:row;
+       align-items:center;
+       justify-content:space-between;
+    }
+
+    .organization > .organization-link{
+       width:80%;
+       padding:10px;
+    }
+   
+    .organization > .link-button{
+       width:20%;
+    }    
+
 }
