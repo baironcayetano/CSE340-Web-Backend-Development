@@ -174,30 +174,30 @@ form{
    -webkit-backdrop-filter: blur(8px);
    border:1px solid rgba(255, 255, 255, 0.6);
    animation:pushSlideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
 
-.alert.success{
-  color:#ddd;
-  background-color: #c8ebc1;
-  border-color: #dcfce7;
-}
-
-.alert.error{
-  color: #7f1d1d;
-  background-color: rgba(254, 242, 242, 0.9);
-  border-color: #fee2e2;
-}
-
-.alert.warning{
-  color: #713f12;
-  background-color: rgba(254, 252, 232, 0.9);
-  border-color: #fef08a;  
-}
-
-.alert.info{
-  color: #1e3a8a;
-  background-color: rgba(239, 246, 255, 0.9);
-  border-color: #dbeafe;
+    &.success{
+        color:#15803d;
+        background-color: #f0fdf4;
+        border: 1px solid #bbf7d0;
+     }
+    
+    &.alert.error{
+        color: #7f1d1d;
+        background-color: rgba(254, 242, 242, 0.9);
+        border-color: #fee2e2;
+     }
+    
+    &.warning{
+        color: #713f12;
+        background-color: rgba(254, 252, 232, 0.9);
+        border-color: #fef08a;  
+     }
+    
+    &.info{
+        color: #1e3a8a;
+        background-color: rgba(239, 246, 255, 0.9);
+        border-color: #dbeafe;
+     }
 }
 
 /** keyframes for toast notifications **/
