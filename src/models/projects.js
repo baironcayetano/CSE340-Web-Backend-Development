@@ -10,7 +10,18 @@ const getAllProjects = async() =>{
     return result.rows;
 }
 
-/** Returns the projects of an organization using it's organization id */
+/**
+ * Get projects by thier associated organization id
+ * @param {number} organizationId - organization id
+ * @returns {Array<{ 
+ *                  project_id:string,
+ *                  organization_id:string, 
+ *                  title:string,
+ *                  description:string,
+ *                  location:string,
+ *                  date:Date, 
+ * }> } - organization projects
+ */
 const getProjectsByOrganizationId = async (organizationId) => {
     const query = `
         SELECT project_id, organization_id, title, description, location, date
@@ -27,7 +38,14 @@ const getProjectsByOrganizationId = async (organizationId) => {
 /**
  * Get Upcoming Projects
  * @param {number} numberOfProjects - The number of upcoming projects to retrieve (Default: 5)
- * @returns {Array<{project_id:string, title:string, description:string, date:Date, organization_id:number, organization_name:string}}
+ * @returns {Array<{ 
+ *                    project_id:string,
+ *                    title:string,
+ *                    description:string,
+ *                    date:Date,
+ *                    organization_id:number,
+ *                    organization_name:string
+ * }} - upcoming projects
 */
 const getUpcomingProjects = async(numberOfProjects=5) =>{
     const query = `
@@ -81,4 +99,41 @@ const getAllProjectsByCategoryId = async (categoryId) => {
     return result.rows;
 };
 
-export {getAllProjects, getProjectsByOrganizationId, getUpcomingProjects, getProjectDetails, getAllProjectsByCategoryId};
+/**
+ * Creates a new project
+ * @param {string} title - project's title
+ * @param {string} description - project's description
+ * @param {string} location - project's location
+ * @param {Date} date - project's date
+ * @param {number} organizationId - organization id
+ * @returns {number} - new project id
+ */
+const createProject = async (title, description, location, date, organizationId) => {
+    const query = `
+        INSERT INTO service_project (title, description, location, date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id;
+    `;
+
+    const queryParams = [title, description, location, date, organizationId];
+    const result = await db.query(query, queryParams);
+
+    //db errors
+    if(!result.rows || result.rows.length === 0){
+        throw new Error("Failed to create project");
+    }
+
+    //logging new project ID
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+        console.log("Created new project with ID: ", result.rows[0].project_id);
+    }
+
+    const newProjectId = result.rows[0].project_id; 
+
+    return (typeof newProjectId !== "number") ? parseInt(newProjectId) : newProjectId;
+}
+
+export { getAllProjects, getProjectsByOrganizationId, 
+         getUpcomingProjects, getProjectDetails,
+         getAllProjectsByCategoryId, createProject
+        };
