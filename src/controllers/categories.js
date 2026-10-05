@@ -1,8 +1,22 @@
 import { getAllCategories, getCategoryById, 
          getCategoriesByProjectId,
-         updateCategoryAssignments
+         updateCategoryAssignments,
+         createCategory
 	} from "../models/categories.js";
 import { getAllProjectsByCategoryId, getProjectDetails } from "../models/projects.js";
+import {body, validationResult} from "express-validator";
+
+
+//Define validation and sanitazion rules for organization form
+//Define validation rules for category form
+const categoryValidation = [
+    body("name")
+                .trim()
+                .notEmpty()
+                .withMessage("Category name required")
+                .isLength({min:3, max:100})
+                .withMessage("Category name must be between 3 and 100 characters"),
+];
 
 /** Render Categories Page */
 const showCategoriesPage = async (req, res, next) => {
@@ -38,6 +52,35 @@ const showCategoryDetailsPage = async (req, res, next) => {
     const title = `${category.name} | Details`;
 
     res.render("category", {title, category, projects});
+}
+
+/** Render new-Category Page */
+const showNewCategoryForm = async (req, res, next) => {
+    const title = "New Category";
+    res.render("new-category", {title});    
+}
+
+/** Process the new-category form */
+const processNewCategoryForm = async (req, res, next) => {
+    //check for validation errors
+    const results = validationResult(req);
+    console.log(results.isEmpty());
+     if(!results.isEmpty()){
+        //validation failed - looping through errors
+        results.array().forEach((err) => {
+	        req.flash("error", err.msg);
+        });
+       
+       //redirect back to the edit-organization form
+       return res.redirect("/new-category");
+    }
+    
+    const {name} = req.body;
+    const categoryId = await createCategory(name);
+
+    //okay
+    req.flash("success", "Category created successfully!");
+    res.redirect(`/category/${categoryId}`);
 }
 
 /** Render show assignation categories form **/
@@ -77,7 +120,6 @@ const processAssignCategoriesForm = async (req, res, next) => {
     const selectedCategoryIds = req.body.categoryIds || [];
     //Ensure selectedCategoryIds is an array
     const categoryIdsArray = Array.isArray(selectedCategoryIds) ? selectedCategoryIds.map(categoryId => parseInt(categoryId)) : [selectedCategoryIds];
-    console.log(categoryIdsArray);
     await updateCategoryAssignments(projectId, categoryIdsArray);
     
     //Okay
@@ -87,5 +129,7 @@ const processAssignCategoriesForm = async (req, res, next) => {
 };
 
 export { showCategoriesPage, showCategoryDetailsPage,
-	 showAssignCategoriesForm, processAssignCategoriesForm
+         showNewCategoryForm, processNewCategoryForm,
+	     showAssignCategoriesForm, processAssignCategoriesForm,
+         categoryValidation
 	};

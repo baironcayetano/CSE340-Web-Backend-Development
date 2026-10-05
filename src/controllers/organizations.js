@@ -126,7 +126,7 @@ const processEditOrganizationForm = async (req, res) => {
      const results = validationResult(req);
      if(!results.isEmpty()){
         //validation failed - looping through errors
-        results.array().forEach((error) => {
+        results.array().forEach((err) => {
 	  req.flash("error", err.msg);
        });
        

@@ -1,6 +1,34 @@
 import db from "./db.js";
 
-/** Get all categories 
+/** Create a new category
+ * @param {string} categoryName - Name of the category
+ * @returns {number} categoryId
+ */
+const createCategory = async (categoryName) => {
+    const query = `
+          INSERT INTO category (name)
+          VALUES($1)
+          RETURNING category_id;
+    `;
+    const queryParams = [categoryName];
+    const result = await db.query(query, queryParams);
+
+    //db errors
+    if(!result.rows || result.rows.length === 0){
+        throw new Error("Failed to create category");
+    }
+
+    //logging category Id in Development mode
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+        console.log("Created new category with ID: ", result.rows[0].category_id);
+    }
+
+    const categoryId = result.rows[0].category_id;
+    
+    return (typeof categoryId === "number") ? categoryId : parseInt(categoryId);
+}
+
+/** Get all categories
  * @returns {Array<{category_id:number, name:string}>}
 */
 const getAllCategories = async() => {
@@ -71,7 +99,7 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
     }
 };
 
-export { getAllCategories, getCategoryById, 
-	 getCategoriesByProjectId, assignCategoryToProject,
-	 updateCategoryAssignments
+export { createCategory, getAllCategories, 
+         getCategoryById, getCategoriesByProjectId, 
+         assignCategoryToProject, updateCategoryAssignments
 };
