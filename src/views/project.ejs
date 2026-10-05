@@ -15,5 +15,8 @@
                 <a href="/category/<%= category.category_id %>" class="link-button">#<%= category.name %></a>
             <% }); %>
         </ul>
+        <a class="link-button" href="/assign-categories/<%= project.organization_id %>">
+            Edit Categories
+        </a>
     </main>
 <%- include('partials/footer') %>

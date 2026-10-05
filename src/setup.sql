@@ -73,7 +73,7 @@ CREATE TABLE category (
 -- This table connects a service_project with its categories using a connection N:N 
 CREATE TABLE has_category(
 	project_id	INT NOT NULL REFERENCES service_project(project_id) ON DELETE CASCADE,
-	category_id INT NOT NULL REFERENCES category(category_id) ON DELETE CASCADE,
+	category_id     INT NOT NULL REFERENCES category(category_id) ON DELETE CASCADE,
 	PRIMARY KEY (project_id, category_id)
 );
 
