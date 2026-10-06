@@ -66,7 +66,7 @@ const getUpcomingProjects = async(numberOfProjects=5) =>{
 /**
  * Get Project Details by Id
  * @param {number} projectId
- * @returns {{project_id:string, title:string, description:string, date:Date, organization_id:number, organization_name:string}}
+ * @returns {{project_id:string, title:string, description:string, date:Date, organization_id:number, organization_name:string} | null}
  */
 const getProjectDetails = async (projectId) => {
     const query = `
@@ -133,7 +133,43 @@ const createProject = async (title, description, location, date, organizationId)
     return (typeof newProjectId !== "number") ? parseInt(newProjectId) : newProjectId;
 }
 
+/** Updates a project 
+ * @param {number} projectId - project id
+ * @param {number} organizationId - project's owner 
+ * @param {string} title - project title
+ * @param {string} description - project's description
+ * @param {string} location - project's location 
+ * @param {Date} date - project's date
+ * @returns {void}
+*/
+const updateProject = async(projectId,organizationId,title, description, location, date) => {
+    const query = `
+        UPDATE service_project
+        SET organization_id = $2,
+            title = $3,
+            description = $4,
+            location = $5,
+            date = $6
+        WHERE project_id = $1
+        RETURNING project_id;`;
+
+    const queryParams = [projectId, organizationId, title, description, location, date];
+    const result = await db.query(query, queryParams);
+    
+    //not found
+    if(result.rows.length === 0){
+        throw new Error("Failed to update project");
+    }
+
+    //log
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+        console.log("Updated project with ID: ", projectId);
+    }
+
+}
+
 export { getAllProjects, getProjectsByOrganizationId, 
          getUpcomingProjects, getProjectDetails,
-         getAllProjectsByCategoryId, createProject
+         getAllProjectsByCategoryId, createProject,
+         updateProject
         };

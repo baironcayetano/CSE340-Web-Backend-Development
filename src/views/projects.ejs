@@ -12,6 +12,9 @@
                 <a href="/organization/<%= project.organization_id %>" class="link">
                     <span><%= project.organization_name %></span>
                 </a>
+                <a href="/edit-project/<%= project.project_id %>" class="link">
+                    <span class="red-text">Edit Project</span>
+                </a>
             </li>
             <% }); %>
         </ul>

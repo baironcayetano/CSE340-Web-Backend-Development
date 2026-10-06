@@ -1,5 +1,5 @@
 import { getCategoriesByProjectId } from "../models/categories.js";
-import { getProjectDetails, getUpcomingProjects, createProject } from "../models/projects.js";
+import { getProjectDetails, getUpcomingProjects, createProject, updateProject } from "../models/projects.js";
 import { getAllOrganizations } from "../models/organizations.js";
 import { body, validationResult } from "express-validator";
 
@@ -108,7 +108,70 @@ const processNewProjectForm = async (req, res) => {
     }
 }
 
+const showEditProjectForm = async (req, res, next) => {
+    const projectId = req.params.id ? parseInt(req.params.id) : null;
+
+    //invalid id
+    if(!projectId || Number.isNaN(projectId) || projectId < 0){
+        const err = new Error("Page Not Found");
+        err.status = 404;
+        return next(err);
+    }
+
+    const title = "Edit Project";
+    
+    const organizations = await getAllOrganizations();
+    const projectDetails = await getProjectDetails(projectId);
+
+    if(!projectDetails){
+        const err = new Error("Page Not Found");
+        err.status = 404;
+        return next(err);
+    }
+    
+    res.render("edit-project", {title, projectDetails, organizations});
+    
+}
+
+const processEditProjectForm = async (req, res) => {
+    const projectId = req.params.id ? parseInt(req.params.id) : null;
+
+    //invalid id
+    if(!projectId || Number.isNaN(projectId) || projectId < 0){
+        const err = new Error("Page Not Found");
+        err.status = 404;
+        return next(err);
+    }
+    
+    //check for validation errors
+    const results = validationResult(req);
+    if(!results.isEmpty()){
+        //validation failed - loop through errors
+        results.array().forEach((error) => {
+            req.flash("error", error.msg);
+        });
+
+        //redirect back to the new organization form
+        return res.redirect(`/edit-project/${projectId}`);
+    }
+
+    const {organizationId, title, description, location, date} = req.body;
+    //We catch the error because we don't want the user to receive the 500 error page after submitting the form
+    try{
+        await updateProject(projectId, organizationId, title, description, location, date); 
+        //Success flash message
+        req.flash("success", "Organization updated successfully!");
+        //project details page
+        res.redirect(`/project/${projectId}`);
+    }catch(error){
+        console.error("Error creating new project:", error);
+        req.flash("error", "There was an error creating the service project");
+        res.redirect("/projects");
+    }
+}
+
 export { showProjectsPage, showProjectDetailsPage,
          showNewProjectForm, processNewProjectForm,
+         showEditProjectForm, processEditProjectForm,
          projectValidation
  };

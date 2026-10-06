@@ -230,17 +230,17 @@ form{
 
 /** For in-text links**/
 .link{
+    padding: 10px;
     text-decoration: none;
-    color:var(--link-color);
+    border-top: 1px solid var(--color-border);
+
+    & > .red-text {
+        color:crimson;
+    }
 }
 
-.link > span, .link > strong {
-    color: var(--link-color);
-}
-
-.link:hover > span, .link:hover > strong {
-    background-color: var(--link-color);
-    color:white;
+.link:hover{
+    background-color: whitesmoke;
 }
 
 /** For grid lists links**/
@@ -273,11 +273,8 @@ form{
 }
 
 .grid-link-element > .link-button {
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
+    border: 0;
     border-radius: 0;
-    margin-bottom: 5px;
     cursor: pointer;
 }
 

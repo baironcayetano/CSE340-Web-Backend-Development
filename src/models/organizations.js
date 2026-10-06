@@ -66,8 +66,7 @@ const updateOrganization = async (organizationId, name, description, contactEmai
 	SET name = $1, description = $2, 
 	    contact_email = $3, logo_filename = $4
 	WHERE organization_id = $5
-	RETURNING organization_id; 
-   `;
+	RETURNING organization_id;`;
 
    const queryParams = [name, description, contactEmail, logoFilename, organizationId];
    const result = await db.query(query, queryParams);

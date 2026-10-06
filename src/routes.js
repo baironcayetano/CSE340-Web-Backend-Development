@@ -8,6 +8,7 @@ import { showOrganizationDetailsPage, showOrganizationsPage,
 } from "./controllers/organizations.js";
 import { processNewProjectForm, showNewProjectForm, 
          showProjectDetailsPage, showProjectsPage,
+         showEditProjectForm, processEditProjectForm,
          projectValidation
 } from "./controllers/projects.js";
 import { showCategoriesPage, showCategoryDetailsPage,
@@ -52,6 +53,12 @@ router.get("/new-project",showNewProjectForm);
 
 //route to handle new project form submission
 router.post("/new-project", projectValidation ,processNewProjectForm);
+
+//route for the edit project form page
+router.get("/edit-project/:id", showEditProjectForm);
+
+//route to process edit project form page
+router.post("/edit-project/:id",projectValidation, processEditProjectForm);
 
 //route for the new category form page
 router.get("/new-category", showNewCategoryForm);
