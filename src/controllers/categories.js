@@ -83,6 +83,24 @@ const processNewCategoryForm = async (req, res, next) => {
     res.redirect(`/category/${categoryId}`);
 }
 
+/** Render edit category form page */
+const showEditCategoryForm = async (req, res, next) => {
+    const categoryId = req.params.id ? parseInt(req.params.id) : null;
+
+    //Invalid Id
+    if(!categoryId || Number.isNaN(categoryId) || categoryId < 0){
+        const err = new Error("Page Not Found");
+        err.status = 404;
+        return next(err);
+    }
+
+    //category details
+    const {name} = await getCategoryById(categoryId);
+    const title = "Edit Category";
+
+    res.render("edit-category", {title, name});
+}
+
 /** Render show assignation categories form **/
 const showAssignCategoriesForm = async (req, res, next) => {
     const projectId = req.params.id ? parseInt(req.params.id) : null;
@@ -131,5 +149,5 @@ const processAssignCategoriesForm = async (req, res, next) => {
 export { showCategoriesPage, showCategoryDetailsPage,
          showNewCategoryForm, processNewCategoryForm,
 	     showAssignCategoriesForm, processAssignCategoriesForm,
-         categoryValidation
+         showEditCategoryForm, categoryValidation
 	};
