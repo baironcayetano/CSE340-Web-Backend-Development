@@ -4,14 +4,17 @@
     <h1>Categories</h1>
     <ul class="link-list">
         <% categories.forEach(category => { %>
-           <li class="link-element">
-                 <a href="/category/<%= category.category_id %>">
+           <li class="link-element with-help-buttons">
+                 <a href="/category/<%= category.category_id %>" class="view-link">
                     <strong><%= category.name %></strong> 
                 </a>
+                <a href="/edit-category/<%= category.category_id %>" class="link-button">Edit Category</a>
             </li>
         <% }); %>
     </ul>
-    <a class="link-button" href="/new-category">Create New Category</a>
+    <div class="centered-button">
+        <a class="link-button" href="/new-category">Create New Category</a>
+    </div>
 </main>
 
 <%- include('partials/footer') %>

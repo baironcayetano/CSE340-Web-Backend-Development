@@ -5,8 +5,8 @@
         <p>Here are a few of our partner organizations:</p>
         <ul class="link-list">
             <% organizations.forEach(organization => { %>
-            <li class="link-element organization">
-                <a href="/organization/<%= organization.organization_id %>" class="organization-link">
+            <li class="link-element with-help-buttons">
+                <a href="/organization/<%= organization.organization_id %>" class="view-link">
                     <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
                     <span><%= organization.name %></span>
                     <span><%= organization.contact_email %></span>
@@ -15,7 +15,9 @@
             </li>
             <% }); %>
         </ul>
-        <p><a href="/new-organization" class="link-button">Add a new organization</a></p>
+        <div class="centered-button">
+            <a href="/new-organization" class="link-button">Add a new organization</a>
+        </div>
     </main>
 
 <%- include('partials/footer') %>

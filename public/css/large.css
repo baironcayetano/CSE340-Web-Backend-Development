@@ -33,18 +33,18 @@
         grid-template-columns: repeat(3, 1fr);
     }
 
-    .organization{
+    .with-help-buttons{
        flex-direction:row;
        align-items:center;
        justify-content:space-between;
     }
 
-    .organization > .organization-link{
+    .with-help-buttons > .view-link{
        width:80%;
        padding:10px;
     }
    
-    .organization > .link-button{
+    .with-help-buttons > .link-button{
        width:20%;
     }    
 

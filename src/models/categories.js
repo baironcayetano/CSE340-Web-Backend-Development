@@ -28,6 +28,34 @@ const createCategory = async (categoryName) => {
     return (typeof categoryId === "number") ? categoryId : parseInt(categoryId);
 }
 
+/** Updates Category 
+ * @param {number} categoryId - Id of the category
+ * @param {string} categoryName - category name
+ * @return {void}
+*/
+const updateCategory = async (categoryId, categoryName) => {
+    const query =  `
+        UPDATE category
+        SET name = $2
+        WHERE category_id = $1
+        RETURNING category_id;
+    `
+    const queryParams = [categoryId, categoryName];
+    const result = await db.query(query, queryParams);
+
+    //Category not found
+    if(result.rows.length === 0){
+	    throw new Error("Category not found");
+    }
+
+    //success in DEV MODE
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+	    console.log("Updated category with ID:", categoryId);
+    }
+
+    return; 
+}
+
 /** Get all categories
  * @returns {Array<{category_id:number, name:string}>}
 */
@@ -101,5 +129,6 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
 
 export { createCategory, getAllCategories, 
          getCategoryById, getCategoriesByProjectId, 
-         assignCategoryToProject, updateCategoryAssignments
+         assignCategoryToProject, updateCategoryAssignments,
+         updateCategory
 };

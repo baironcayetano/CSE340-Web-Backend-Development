@@ -350,7 +350,7 @@ form{
     justify-content: center;
 }
 
-.organization{
+.with-help-buttons{
     display:flex;
     flex-direction:column;
     align-items:center;
@@ -359,21 +359,20 @@ form{
     gap:10px;
 }
 
-
-.organization:hover{
+.with-help-buttons:hover{
     background-color: white;
 }
 
-.organization > .organization-link{
+.with-help-buttons > .view-link{
    width:100%;
    padding:10px;
 }
 
-.organization > .organization-link:hover{
+.with-help-buttons > .view-link:hover{
     background-color: var(--color-background);
 }
 
-.organization > .link-button{
+.with-help-buttons > .link-button{
    width:max-content;
    text-align:center;
    display:block;
