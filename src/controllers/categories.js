@@ -1,7 +1,8 @@
 import { getAllCategories, getCategoryById, 
          getCategoriesByProjectId,
          updateCategoryAssignments,
-         createCategory
+         createCategory,
+         updateCategory
 	} from "../models/categories.js";
 import { getAllProjectsByCategoryId, getProjectDetails } from "../models/projects.js";
 import {body, validationResult} from "express-validator";
@@ -64,7 +65,6 @@ const showNewCategoryForm = async (req, res, next) => {
 const processNewCategoryForm = async (req, res, next) => {
     //check for validation errors
     const results = validationResult(req);
-    console.log(results.isEmpty());
      if(!results.isEmpty()){
         //validation failed - looping through errors
         results.array().forEach((err) => {
@@ -81,7 +81,7 @@ const processNewCategoryForm = async (req, res, next) => {
     //okay
     req.flash("success", "Category created successfully!");
     res.redirect(`/category/${categoryId}`);
-}
+};
 
 /** Render edit category form page */
 const showEditCategoryForm = async (req, res, next) => {
@@ -95,11 +95,44 @@ const showEditCategoryForm = async (req, res, next) => {
     }
 
     //category details
-    const {name} = await getCategoryById(categoryId);
-    const title = "Edit Category";
+    let category = await getCategoryById(categoryId);
+    category.category_id = categoryId;
 
-    res.render("edit-category", {title, name});
-}
+    const title = "Edit Category";
+    res.render("edit-category", {title, category});
+};
+
+/** Process edit category form */
+const processEditCategoryForm = async (req, res) => {
+    const categoryId = req.params.id ? parseInt(req.params.id) : null;
+    
+    //id param validation
+    if(!categoryId || Number.isNaN(categoryId) || categoryId < 0){
+        req.flash("error","Category Not Found");
+        return res.redirect(`/edit-category/${categoryId}`);
+    }
+    
+    //check for validation errors
+    const results = validationResult(req);
+     if(!results.isEmpty()){
+        //validation failed - looping through errors
+        results.array().forEach((err) => {
+	        req.flash("error", err.msg);
+        });
+       
+       //redirect back to the edit-organization form
+       return res.redirect(`/edit-category/${categoryId}`);
+    }
+
+    //updating category
+    const {name} = req.body;
+    await updateCategory(categoryId, name)
+
+    //Okay
+    req.flash("success", "Categories updated successfully!");
+    res.redirect(`/category/${categoryId}`);
+
+};
 
 /** Render show assignation categories form **/
 const showAssignCategoriesForm = async (req, res, next) => {
@@ -130,9 +163,8 @@ const processAssignCategoriesForm = async (req, res, next) => {
 
     //id validation
     if(!projectId || Number.isNaN(projectId)|| projectId < 0){
-        const err = new Error("Page Not Found");
-        err.status = 404;
-        return next(err);
+        req.flash("error", "Project Not Found");
+        return res.redirect(`/assign-categories/${projectId}`);
     }
 
     const selectedCategoryIds = req.body.categoryIds || [];
@@ -149,5 +181,6 @@ const processAssignCategoriesForm = async (req, res, next) => {
 export { showCategoriesPage, showCategoryDetailsPage,
          showNewCategoryForm, processNewCategoryForm,
 	     showAssignCategoriesForm, processAssignCategoriesForm,
-         showEditCategoryForm, categoryValidation
+         showEditCategoryForm, processEditCategoryForm,
+         categoryValidation
 	};
