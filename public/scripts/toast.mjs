@@ -10,10 +10,10 @@ export default function deleteToasts(alerts, toastContainer){
    alerts.forEach(alert => {
        setTimeout(()=>{
           alert.remove();
-       }, 9000)
+       }, 6000)
    });
 
    setTimeout(()=>{
       toastContainer.remove();
-   }, 9000 + (100 * alerts.length)) //deletes parent element after 1.5m + (1s * notification)
+   }, 6000 + (100 * alerts.length)) //deletes parent element after 1m + (1s * notification)
 }

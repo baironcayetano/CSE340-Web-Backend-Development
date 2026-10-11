@@ -1,22 +1,19 @@
 import express from "express";
 
 import { showHomePage } from "./controllers/index.js";
-import { showOrganizationDetailsPage, showOrganizationsPage, 
-         showNewOrganizationForm, processNewOrganizationForm,
-         organizationValidation, showEditOrganizationForm,
-         processEditOrganizationForm
-} from "./controllers/organizations.js";
-import { processNewProjectForm, showNewProjectForm, 
-         showProjectDetailsPage, showProjectsPage,
-         showEditProjectForm, processEditProjectForm,
-         projectValidation
-} from "./controllers/projects.js";
-import { showCategoriesPage, showCategoryDetailsPage,
-         showAssignCategoriesForm, processAssignCategoriesForm,
-         showNewCategoryForm, processNewCategoryForm,
-         showEditCategoryForm, processEditCategoryForm,
-         categoryValidation
-} from "./controllers/categories.js";
+import { showOrganizationDetailsPage, showOrganizationsPage, showNewOrganizationForm, 
+         processNewOrganizationForm, organizationValidation, showEditOrganizationForm,
+         processEditOrganizationForm }
+         from "./controllers/organizations.js";
+import { processNewProjectForm, showNewProjectForm, showProjectDetailsPage,
+         showProjectsPage, showEditProjectForm, processEditProjectForm,
+         projectValidation } 
+         from "./controllers/projects.js";
+import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm, 
+         processAssignCategoriesForm, showNewCategoryForm, processNewCategoryForm,
+         showEditCategoryForm, processEditCategoryForm, categoryValidation } 
+         from "./controllers/categories.js";
+import { showUserRegistrationForm, processUserRegistrationForm } from "./controllers/users.js";
 import { testErrorPage } from "./controllers/errors.js";
 
 const router = express.Router();
@@ -28,6 +25,12 @@ router.get("/categories", showCategoriesPage);
 
 //error-handling routes
 router.get("/test-error", testErrorPage);
+
+//user registration form route
+router.get("/register", showUserRegistrationForm);
+
+//process user registration form
+router.post("/register", processUserRegistrationForm);
 
 //route for organization details page
 router.get("/organization/:id", showOrganizationDetailsPage);
