@@ -56,8 +56,21 @@ app.use((req, res, next) => {
     next();
 })
 
-//makes NODE_ENV available to all templates
+/* This middleware prepares the local variables so that they can be 
+*  accesible throughout the project.
+*  including:
+*  - NODE_ENV variable
+*  - isLoggedIn variable
+*/
 app.use((req, res, next) => {
+
+    res.locals.isLoggedIn = false; //default
+    
+    //checking user session
+    if(req.session && req.session.user){
+        res.locals.isLoggedIn = true;
+    }
+
     res.locals.NODE_ENV = NODE_ENV;
     next();
 })

@@ -1,5 +1,5 @@
-import bycript from "bcrypt";
-import { createUser } from "../models/users.js";
+import bcrypt from "bcrypt";
+import { createUser, authenticateUser } from "../models/users.js";
 
 /** Shows registration form  */
 const showUserRegistrationForm = (req, res) => {
@@ -13,7 +13,7 @@ const processUserRegistrationForm = async (req, res) => {
     try {
         //hash the password before storing it
         const salt = await bycript.genSalt(10);
-        const passwordHash = await bycript.hash(password, salt);
+        const passwordHash = await bcrypt.hash(password, salt);
 
         //create the user in the database
         const userId = await createUser(name, email, passwordHash, 1);
@@ -36,4 +36,51 @@ const processUserRegistrationForm = async (req, res) => {
     }
 }
 
-export { showUserRegistrationForm, processUserRegistrationForm};
+/** Shows login form **/
+const showLoginForm = (req, res) => {
+      res.render("login",{title:"Login"});
+};
+
+/** Processes login form **/
+const processLoginForm = async (req, res) => {
+     const {email, password} = req.body;
+     try{
+     	  const user = await authenticateUser(email, password);
+
+	  //user not found -> Invalid credentials
+	  if(!user){
+		req.flash("error", "Invalid email or password");
+		return res.redirect("/login");
+	    }
+
+	 //store user info in session
+	 req.session.user = user;
+	 req.flash("success", "Login successful!");
+
+	 if(res.locals.NODE_ENV === "development"){
+	 	console.log("User logged in: ", user);
+	 }
+
+	//redirecting to home page
+	res.redirect("/");
+
+    }catch(error){
+      	  console.error("Error during login:", error);
+	  req.flash("error", "An error ocurred during login. Please, try again.");
+	  res.redirect("/login");
+    }
+};
+
+/** Processes log outs **/
+const processLogout = async (req, res) => {
+      //deletes existing session
+      if(req.session.user){
+	 delete req.session.user;
+      }
+
+      req.flash("success", "Logout successful!");
+      res.redirect("/login");
+};
+
+export { showUserRegistrationForm, processUserRegistrationForm,
+	 showLoginForm, processLoginForm, processLogout };

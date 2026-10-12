@@ -46,6 +46,10 @@
    
     .with-help-buttons > .link-button{
        width:20%;
-    }    
+    }
+    
+    .toast-container{
+        top:10%;
+    }
 
 }
