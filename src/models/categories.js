@@ -67,11 +67,11 @@ const getAllCategories = async() => {
 
 /** Get a category by Id 
  * @param {number} categoryId
- * @returns {{name:string}}
+ * @returns {{name:string, category_id:string}}
 */
 const getCategoryById = async (categoryId) => {
     const query = `
-        SELECT name FROM category
+        SELECT name, category_id FROM category
         WHERE category.category_id = $1; 
     `
     const queryParams = [categoryId];

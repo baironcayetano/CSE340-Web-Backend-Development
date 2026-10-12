@@ -11,13 +11,17 @@
                     <span><%= organization.name %></span>
                     <span><%= organization.contact_email %></span>
                 </a>
+            <% if(user && user.role_name === "admin"){%>
                 <a href="/edit-organization/<%= organization.organization_id %>" class="link-button">Edit organization</a>
+            <%}%>
             </li>
             <% }); %>
         </ul>
+    <% if(user && user.role_name === "admin"){%>
         <div class="centered-button">
             <a href="/new-organization" class="link-button">Add a new organization</a>
         </div>
+    <%}%>
     </main>
 
 <%- include('partials/footer') %>

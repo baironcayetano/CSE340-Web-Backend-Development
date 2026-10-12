@@ -8,13 +8,17 @@
                  <a href="/category/<%= category.category_id %>" class="view-link">
                     <strong><%= category.name %></strong> 
                 </a>
+            <% if(user && user.role_name === "admin"){ %>
                 <a href="/edit-category/<%= category.category_id %>" class="link-button">Edit Category</a>
+            <%}%>
             </li>
         <% }); %>
     </ul>
+<% if(user && user.role_name === "admin"){ %>
     <div class="centered-button">
         <a class="link-button" href="/new-category">Create New Category</a>
     </div>
+<%}%>
 </main>
 
 <%- include('partials/footer') %>

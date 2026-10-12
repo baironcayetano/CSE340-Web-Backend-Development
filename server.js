@@ -61,15 +61,18 @@ app.use((req, res, next) => {
 *  including:
 *  - NODE_ENV variable
 *  - isLoggedIn variable
+*  - user
 */
 app.use((req, res, next) => {
 
     res.locals.isLoggedIn = false; //default
-    
     //checking user session
     if(req.session && req.session.user){
         res.locals.isLoggedIn = true;
     }
+
+    //user session 
+    res.locals.user = req.session.user || null;
 
     res.locals.NODE_ENV = NODE_ENV;
     next();

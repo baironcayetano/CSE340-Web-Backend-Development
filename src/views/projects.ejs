@@ -15,8 +15,10 @@
             </li>
             <% }); %>
         </ul>
+    <% if(user && user.role_name === "admin"){ %>
         <div class="centered-button">
             <a href="/new-project" class="link-button">Create New Project</a>
         </div>
+    <%}%>
     </main>
 <%- include('partials/footer') %>

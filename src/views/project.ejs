@@ -15,6 +15,7 @@
                 <a href="/category/<%= category.category_id %>" class="link-button">#<%= category.name %></a>
             <% }); %>
         </ul>
+    <% if(user && user.role_name === "admin"){ %>
         <div class="centered-button">
             <a class="link-button" href="/assign-categories/<%= project.organization_id %>">
                 Edit Categories
@@ -23,5 +24,6 @@
         <div class="centered-button">
             <a href="/edit-project/<%= project.project_id%>" class="link-button">Edit Project</a>
         </div>
+    <%}%>
     </main>
 <%- include('partials/footer') %>

@@ -11,6 +11,11 @@
            </li>
         <% }); %>
     </ul>
+    <% if(user && user.role_name === "admin"){ %>
+        <div class="centered-button">
+            <a href="/edit-category/<%= category.category_id %>" class="link-button" title="edit category">Edit Category</a>
+        </div>
+    <%}%>
 </main>
 
 <%- include('partials/footer') %>
