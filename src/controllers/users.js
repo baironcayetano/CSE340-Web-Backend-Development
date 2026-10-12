@@ -12,7 +12,7 @@ const processUserRegistrationForm = async (req, res) => {
 
     try {
         //hash the password before storing it
-        const salt = await bycript.genSalt(10);
+        const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(password, salt);
 
         //create the user in the database
