@@ -61,8 +61,8 @@ const processLoginForm = async (req, res) => {
 	 	console.log("User logged in: ", user);
 	 }
 
-	//redirecting to home page
-	res.redirect("/");
+	//redirecting to dashboard page
+	res.redirect("/dashboard");
 
     }catch(error){
       	  console.error("Error during login:", error);
@@ -82,5 +82,25 @@ const processLogout = async (req, res) => {
       res.redirect("/login");
 };
 
+/** show dashboard page */
+const showDashboard = async (req, res) => {
+    const {name, email} = req.session.user;
+    res.render("dashboard",{title:"Dashboard", name, email});
+};
+
+/** Middleware to protect routes */
+const requireLogin = async (req, res, next) => {
+    //verifies the existance of user session
+    if(!req.session || !req.session.user){
+        req.flash("error", "You must be logged in to access that page.");
+        //redirect to login page
+        return res.redirect("/login");
+    }
+
+    //if the session exists, continue...
+    next();
+};
+
 export { showUserRegistrationForm, processUserRegistrationForm,
-	 showLoginForm, processLoginForm, processLogout };
+	 showLoginForm, processLoginForm, processLogout,
+     showDashboard, requireLogin };
