@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { createUser, authenticateUser } from "../models/users.js";
+import { createUser, authenticateUser, getAllUsers } from "../models/users.js";
 
 /** Shows registration form  */
 const showUserRegistrationForm = (req, res) => {
@@ -92,6 +92,12 @@ const showDashboard = async (req, res) => {
     res.render("dashboard",{title:"Dashboard", name, email});
 };
 
+/** show users page */
+const showUsers = async (req, res) => {
+    const users = await getAllUsers();
+    res.render("users", {title:"Users", users});
+}
+
 /** Middleware to protect routes */
 const requireLogin = async (req, res, next) => {
     //verifies the existance of user session
@@ -133,4 +139,4 @@ const requireRole = (role) => {
 
 export { showUserRegistrationForm, processUserRegistrationForm,
 	 showLoginForm, processLoginForm, processLogout,
-     showDashboard, requireLogin, requireRole };
+     showDashboard, showUsers, requireLogin, requireRole };

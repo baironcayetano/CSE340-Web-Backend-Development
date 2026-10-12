@@ -15,19 +15,30 @@ import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm,
          from "./controllers/categories.js";
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm,
 	     processLoginForm, processLogout, requireLogin,
-         showDashboard, requireRole }  
+         showDashboard, requireRole, 
+         showUsers}  
          from "./controllers/users.js";
 import { testErrorPage } from "./controllers/errors.js";
 
 const router = express.Router();
 
+/** ---------------------
+ *  PUBLIC ROUTES
+ * ---------------------- */
 router.get("/", showHomePage);
 router.get("/organizations", showOrganizationsPage);
 router.get("/projects", showProjectsPage);
 router.get("/categories", showCategoriesPage);
+//route for organization details page
+router.get("/organization/:id", showOrganizationDetailsPage);
+//route for project details page
+router.get("/project/:id", showProjectDetailsPage);
+//route for category details page
+router.get("/category/:id", showCategoryDetailsPage);
 
 //error-handling routes
 router.get("/test-error", testErrorPage);
+
 
 /** ---------------------
 * User Registration Routes
@@ -47,17 +58,12 @@ router.get("/logout", processLogout);
  * ----------------------- */
 router.get("/dashboard", requireLogin, showDashboard);
 
-//route for organization details page
-router.get("/organization/:id", showOrganizationDetailsPage);
-//route for project details page
-router.get("/project/:id", showProjectDetailsPage);
-//route for category details page
-router.get("/category/:id", showCategoryDetailsPage);
-
-
 /** ------------------------- 
  *  ADMIN ROUTES
  * -------------------------- */
+
+//route to display users
+router.get("/users", requireRole("admin"), showUsers);
 
 //route for new orgazanization page
 router.get("/new-organization", requireRole("admin"), showNewOrganizationForm);

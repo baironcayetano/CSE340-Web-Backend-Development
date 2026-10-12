@@ -375,6 +375,35 @@ form{
    display:block;
 }
 
+/** TABLE ELEMENTS **/
+.table-container{
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table {
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #ddd;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+.table > caption{
+    background-color: whitesmoke;
+}
+
+.table > thead, .table > tbody > tr{
+    border-bottom: 1px solid #ddd;
+    padding: 5px;
+}
+
+.table > thead > tr > th, .table > tbody > tr > td {
+    border-right: 1px solid #ddd;
+    padding-inline-start: 5px;
+}
+
 
 /** For (no link) buttons **/
 button{
