@@ -17,6 +17,10 @@ const processUserRegistrationForm = async (req, res) => {
 
         //create the user in the database
         const userId = await createUser(name, email, passwordHash, 1);
+        //There is a problem here:
+        // I need to retrive the user information to set the user
+        // in the session to avoid the problem of making the user
+        // log in with their new account after creating it.
 
         //redirect to the home page
         req.flash("success", "Registration successful! Please log in.");
@@ -101,6 +105,32 @@ const requireLogin = async (req, res, next) => {
     next();
 };
 
+/**
+ * Middleware factory to require specific role for route access
+ * Returns middleware that checks if user has the required role
+ * 
+ * @param {string} role - The role name required (e.g., 'admin', 'user')
+ * @returns {Function} Express middleware function
+ */
+const requireRole = (role) => {
+    return (req, res, next) => {
+        // Check if user is logged in first
+        if (!req.session || !req.session.user) {
+            req.flash('error', 'You must be logged in to access this page.');
+            return res.redirect('/login');
+        }
+
+        // Check if user's role matches the required role
+        if (req.session.user.role_name !== role) {
+            req.flash('error', 'You do not have permission to access this page.');
+            return res.redirect('/');
+        }
+
+        // User has required role, continue
+        next();
+    };
+};
+
 export { showUserRegistrationForm, processUserRegistrationForm,
 	 showLoginForm, processLoginForm, processLogout,
-     showDashboard, requireLogin };
+     showDashboard, requireLogin, requireRole };

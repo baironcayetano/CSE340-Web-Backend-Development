@@ -38,14 +38,16 @@ const createUser = async (name, email, passwordHash, roleId) => {
  *               name:string, 
  *               email:string,
  *               password_hash:string,
- *               role_id:string,
+ *               role_name:string,
  *            } | null>}
 */
 const findUserByEmail = async (email) => {
     const query = `
-        SELECT user_id, name, email, password_hash, role_id
-        FROM users
-        WHERE email = $1;`;
+        SELECT u.user_id, u.name, u.email, u.password_hash, r.role_name 
+        FROM users u
+        JOIN roles r ON u.role_id = r.role_id
+        WHERE u.email = $1;`;
+
     const queryParams = [email];
     const result = await db.query(query, queryParams);
 
@@ -73,7 +75,7 @@ const verifyPassword = async (password, passwordHash) => {
  *              user_id:string, 
  *              name:string,
  *              email:string,
- *              role_id:string,
+ *              role_name:string,
  *          } | null> }
 */
 const authenticateUser = async (email, password) => {
