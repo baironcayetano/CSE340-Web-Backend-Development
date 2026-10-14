@@ -8,5 +8,38 @@
             <a href="/users" class="link-button">View Users</a>
         </div>
     <%}%>
+    <% if(user && user.role_name === "user"){%>
+        <h3>My Volunteer Projects</h3>
+        <% if(userProjectVolunteers && userProjectVolunteers.length > 0){ %>
+
+            <div class="table-container">
+                <table class="table">
+                    <caption>My Volunteer Projects</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Joined At:</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% userProjectVolunteers.forEach(project => { %>
+                            <tr>
+                                <td><a href="/project/<%= project.project_id %>"><%= project.title %></a></td>
+                                <td><%= new Date(project.date).toLocaleString(undefined, { dateStyle:"medium", timeStyle:"short"})%> </td>
+                                <td><%= new Date(project.joined_at).toLocaleString(undefined, { dateStyle:"medium", timeStyle:"short"})%> </td>
+                                <td><a href="/project/withdraw/<%= project.project_id %>" class="action">Withdraw</a></td>
+                            </tr>
+                        <%});%>
+                    </tbody>
+                </table>
+            </div>
+
+         <%}else{%>
+            <p>(There is nothing to show here)</p>
+            <a href="/projects" class="link-button">See Projects</a>
+        <%}%>
+    <%}%>
 </main>
 <%- include("partials/footer") %>

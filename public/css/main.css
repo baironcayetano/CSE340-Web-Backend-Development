@@ -332,10 +332,29 @@ form{
     color: black;
     padding: 10px;
     cursor:pointer;
+
+    &.signup{
+        font-weight: bolder;
+        color:white;
+        background-color: black;
+    }
+
+    &.withdraw{
+        font-weight: bolder;
+        color: crimson;
+        background-color: transparent;
+    }
 }
 
 .link-button:hover{
     background-color: var(--color-background);
+
+    &.signup{
+        font-weight: bolder;
+        color:white;
+        background-color: black;
+    }
+
 }
 
 .centered-button{
@@ -402,6 +421,17 @@ form{
 .table > thead > tr > th, .table > tbody > tr > td {
     border-right: 1px solid #ddd;
     padding-inline-start: 5px;
+
+    & > a {
+        color:black;
+        font-weight: bolder;
+        text-decoration: none;
+        cursor:pointer;
+
+        &.action{
+            color:crimson;
+        }
+    }
 }
 
 

@@ -117,3 +117,13 @@ INSERT INTO has_category (project_id, category_id)
 VALUES (1,1), (2,1),(3,2), (4,3), (5,3),
 	   (6,4), (7,4), (8,4), (9,5), (10,4),
 	   (11,2), (12,5), (13,4), (14,1), (15,3);
+
+-- ============================
+-- PROJECT VOLUNTEERS
+-- ============================
+CREATE TABLE project_volunteers (
+	project_id	INT NOT NULL REFERENCES service_project(project_id) ON DELETE CASCADE,
+	user_id     INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+	joined_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY (project_id, user_id)
+);

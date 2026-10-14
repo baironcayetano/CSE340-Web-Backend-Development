@@ -1,5 +1,9 @@
 import bcrypt from "bcrypt";
-import { createUser, authenticateUser, getAllUsers } from "../models/users.js";
+import { createUser, authenticateUser, 
+         getAllUsers, getAllUserProjectVolunteers, 
+         signupUserToProject,
+         withdrawUserFromProject
+        } from "../models/users.js";
 
 /** Shows registration form  */
 const showUserRegistrationForm = (req, res) => {
@@ -88,9 +92,85 @@ const processLogout = async (req, res) => {
 
 /** show dashboard page */
 const showDashboard = async (req, res) => {
-    const {name, email} = req.session.user;
-    res.render("dashboard",{title:"Dashboard", name, email});
+    //for admins
+    if(req.session.user.role_name === "admin"){
+        const {name, email} = req.session.user;
+        return res.render("dashboard",{title:"Dashboard", name, email});
+    }
+    
+    //for users
+    const {name, email, user_id} = req.session.user;
+    const userId = parseInt(user_id); //user Id must be an integer
+
+    const userProjectVolunteers = await getAllUserProjectVolunteers(userId);
+    return res.render("dashboard",{title:"Dashboard", name, email, userProjectVolunteers});
 };
+
+/** Process signups to service projects
+ * 
+ *  ONLY FOR USERS. ADMINS SHOULD NOT BE ABLE TO SIGNUP FOR PROJECTS
+ */
+const processUserSignupToSP = async (req, res, next) => {
+    const projectId = req.params.id ? parseInt(req.params.id) : null;
+
+    //Invalid request
+    if(!projectId || Number.isNaN(projectId) || projectId <= 0){
+        const err = new Error("Invalid id parameter");
+        err.status = 404;
+        return next(err);
+    }
+    
+    const {user_id} = req.session.user;
+
+    //Signing up to project
+    try {
+        await signupUserToProject(parseInt(user_id), projectId);
+        //success message
+        req.flash("success", "Signed Up to project successfully!");
+        //redirect to details page for this project
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        //This user is already signed up for this project
+        if(error.code === "23505"){
+            req.flash("error", "You are already signed up for this project");
+        //any other error
+        }else{
+            req.flash("error", "Failed to sign up for project. Please, try again!");
+        }
+        //redirect to project's details page
+        return res.redirect(`/project/${projectId}`)
+    }
+}
+
+/** Process withdraw from service projects
+ * 
+ *  ONLY FOR USERS. ADMINS SHOULD NOT BE ABLE TO WITHDRAW FROM PROJECTS
+ */
+const processUserWithdrawFromSP = async (req, res, next) => {
+    const projectId = req.params.id ? parseInt(req.params.id) : null;
+
+    //Invalid request
+    if(!projectId || Number.isNaN(projectId) || projectId <= 0){
+        const err = new Error("Invalid id parameter");
+        err.status = 404;
+        return next(err);
+    }
+    
+    const {user_id} = req.session.user;
+
+    //Signing up to project
+    try {
+        await withdrawUserFromProject(parseInt(user_id), projectId);
+        //success message
+        req.flash("success", "Withdraw from project completed successfully!");
+        //redirect to details page for this project
+        res.redirect(`/project/${projectId}`);
+    } catch (error) {
+        req.flash("error", "Failed to withdraw from project. Please, try again!");
+        //redirect to project's details page
+        return res.redirect(`/project/${projectId}`)
+    }
+} 
 
 /** show users page */
 const showUsers = async (req, res) => {
@@ -139,4 +219,5 @@ const requireRole = (role) => {
 
 export { showUserRegistrationForm, processUserRegistrationForm,
 	 showLoginForm, processLoginForm, processLogout,
-     showDashboard, showUsers, requireLogin, requireRole };
+     showDashboard, showUsers, processUserSignupToSP, 
+     processUserWithdrawFromSP, requireLogin, requireRole };

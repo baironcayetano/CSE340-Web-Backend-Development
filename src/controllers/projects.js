@@ -2,6 +2,7 @@ import { getCategoriesByProjectId } from "../models/categories.js";
 import { getProjectDetails, getUpcomingProjects, createProject, updateProject } from "../models/projects.js";
 import { getAllOrganizations } from "../models/organizations.js";
 import { body, validationResult } from "express-validator";
+import { getUserProjectVolunteerStatus } from "../models/users.js";
 
 //Define validation and sanitazion rules for organization form
 //Define validation rules for organization form
@@ -68,6 +69,12 @@ const showProjectDetailsPage = async(req, res, next) => {
 
     const categories = await getCategoriesByProjectId(projectId);
     const title = `${project.title} | Details`;
+
+    if(req.session.user && req.session.user.role_name === "user"){
+        const {user_id} = req.session.user;
+        const projectVolunteerStatus = await getUserProjectVolunteerStatus(parseInt(user_id), projectId);
+        return res.render("project", {title, project, categories, projectVolunteerStatus})
+    }
     
     return res.render("project", {title, project, categories});    
 }

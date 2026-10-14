@@ -16,7 +16,9 @@ import { showCategoriesPage, showCategoryDetailsPage, showAssignCategoriesForm,
 import { showUserRegistrationForm, processUserRegistrationForm, showLoginForm,
 	     processLoginForm, processLogout, requireLogin,
          showDashboard, requireRole, 
-         showUsers}  
+         showUsers,
+         processUserSignupToSP,
+         processUserWithdrawFromSP}  
          from "./controllers/users.js";
 import { testErrorPage } from "./controllers/errors.js";
 
@@ -39,6 +41,12 @@ router.get("/category/:id", showCategoryDetailsPage);
 //error-handling routes
 router.get("/test-error", testErrorPage);
 
+
+/** ------------------------
+ *  Project Volunteers
+ * ------------------------ */
+router.get("/project/signup/:id", requireRole("user"), processUserSignupToSP)
+router.get("/project/withdraw/:id", requireRole("user"), processUserWithdrawFromSP);
 
 /** ---------------------
 * User Registration Routes

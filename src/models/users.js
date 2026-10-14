@@ -108,4 +108,109 @@ const getAllUsers = async () => {
     return result.rows;
 }
 
-export {createUser, authenticateUser, getAllUsers};
+/** -------------------------------
+ * USER SUSCRIPTIONS TO PROJECTS 
+ * -------------------------------- */
+
+/** Get all user's suscriptions to projects 
+ * @param {number} userId - user's id
+ * @returns {Promise<{ project_id:string, 
+ *                     title:string, 
+ *                     date:Date }[] 
+ *                     | null>
+ * }
+*/
+const getAllUserProjectVolunteers = async (userId) => {
+    const query = `
+        SELECT p.joined_at, s.project_id, s.title, s.date
+        FROM service_project s
+        JOIN project_volunteers p 
+        ON p.project_id = s.project_id
+        WHERE p.user_id = $1;
+    `;
+    const queryParams = [userId];
+    const result = await db.query(query,queryParams);
+
+    //projects not found
+    if(result.rows.length === 0){
+        return null;
+    }
+
+    return result.rows;
+};
+
+/** Get suscription status using the project Id and user Id
+*  @param {number} userId - User Id
+*  @param {number} projectId - Proje            <p>But you can still signup to one of them </p> ct Id
+*  @returns {Promise<boolean>}
+*/
+const getUserProjectVolunteerStatus = async (userId, projectId) => {
+    const query = `
+        SELECT s.project_id
+        FROM service_project s
+        JOIN project_volunteers p 
+        ON p.project_id = s.project_id
+        WHERE p.user_id = $1 AND p.project_id = $2;
+    `;
+
+    const queryParams = [userId, projectId]
+    const result = await db.query(query, queryParams);
+
+    //if the results includes the project_id
+    //it means that the user is signed up to it
+    const projectVolunteerStatus = (result.rows.length === 0) ? false : true;
+    return projectVolunteerStatus;
+};            
+
+/** Signup user to a service project 
+ * @param {number} userId - user's ID
+ * @param {number} projectId - project's ID
+ * @returns {Promise<void>}
+*/
+const signupUserToProject = async(userId, projectId) => {
+    const query = `
+        INSERT INTO project_volunteers (user_id, project_id)
+        VALUES ($1, $2)
+        RETURNING user_id;`;
+    const queryParams = [userId, projectId];
+    const result = await db.query(query, queryParams);
+    
+    //If the result does not include de user_id
+    //it means that something went wrong
+    if(result.rows.length === 0){
+        throw new Error("Failed to sign up user for this project");
+    }
+
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+        console.log(`Suscribed user with ID: ${userId} to service project: ${projectId}!`);
+    }
+
+};
+
+/** withdraw user from a service project
+ * @param {number} userId - user's id
+ * @param {number} projectId - project's id
+ * @returns {Promise<void>}
+ *  */
+const withdrawUserFromProject = async(userId, projectId) => {
+    const query = `DELETE FROM project_volunteers 
+                   WHERE user_id = $1 AND project_id = $2
+                   RETURNING project_id`;
+    const queryParams = [userId, projectId];
+    const result = await db.query(query, queryParams);
+
+    //Error deleting
+    if(result.rows.length === 0){
+        throw new Error("Failed to unsuscribe user from service_project");
+    }
+
+    if(process.env.ENABLE_SQL_LOGGING === "true"){
+        console.log(`Unsuscribed user with ID: ${userId} from service project: ${projectId}!`);
+    }
+
+};
+
+export {createUser, authenticateUser, getAllUsers,
+        getAllUserProjectVolunteers, getUserProjectVolunteerStatus,
+        signupUserToProject, withdrawUserFromProject
+};

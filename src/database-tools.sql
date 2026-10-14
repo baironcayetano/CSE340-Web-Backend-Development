@@ -7,7 +7,7 @@ DROP TABLE service_project;
 DROP TABLE organization;
 DROP TABLE roles;
 DROP TABLE users;
-
+DROP TABLE project_volunteers;
 -- ============================
 -- TEST USER
 -- ============================
